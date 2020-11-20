@@ -54,17 +54,19 @@ app.get("/:slug", (req, res) => {
 
     Article.findOne({
         where : {
-            slug : slug
-        }
+            slug : slug,
+
+        },
     }).then((article) => {
         if(article !== undefined){
             Category.findAll().then((categories) => {
-                res.render("article", {article : article, categories : categories})
+                res.render("partials/article", {article : article, categories : categories})
             });
         } else {
             res.redirect("/");
         }
     }).catch(err => {
+        console.log(err)
         res.redirect("/");
     })
 
@@ -81,7 +83,7 @@ app.get('/category/:slug', (req, res) => {
     }).then(category => {
         if(category !== undefined){
             Category.findAll().then(categories => {
-                res.render("index", {article : category.articles, categories : categories})
+                res.render("index", {articles : category.articles, categories : categories})
             });
         } 
         else {
