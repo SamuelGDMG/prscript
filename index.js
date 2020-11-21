@@ -1,16 +1,22 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const connection = require("./database/database");
-
+const session = require("express-session");
 const app = express();
 
 const categoriesController = require("./categories/CategoriesController");
 const articlesController = require("./articles/ArticlesController");
+const usersController = require("./users/UsersController");
 
 const Article = require("./articles/Articles");
 const Category = require("./categories/Category");
+const User = require("./users/User");
 
 app.set('view engine','ejs');
+
+app.use(session({
+    secret: "textoqualquer", cookie : {maxAge: 3000000}
+}))
 
 app.use(bodyParser.urlencoded({
     extended:false
@@ -30,7 +36,7 @@ app.use(express.static('public'));
 
 app.use("/", categoriesController);
 app.use("/", articlesController);
-
+app.use("/", usersController);
 
 app.listen(8081, () =>{
     console.log("RODANDO"); 
