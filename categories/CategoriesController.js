@@ -8,12 +8,13 @@ const Category = require("./Category");
 //carregando a bliblioteca slugify
 const slugify = require("slugify");
 
+const adminAuth = require("../middlewares/adminAuth");
 
-router.get("/admin/categories/new", (req, res) => {
+router.get("/admin/categories/new", adminAuth, (req, res) => {
     res.render("admin/categories/new");
 });
 
-router.post("/categories/save", (req, res) => {
+router.post("/categories/save", adminAuth, (req, res) => {
     var title = req.body.title;
     if (title != undefined) {
         Category.create({ //insert into
@@ -29,7 +30,7 @@ router.post("/categories/save", (req, res) => {
 });
 
 //criando a rota para listar as categorias
-router.get("/admin/categories", (req, res) => {
+router.get("/admin/categories", adminAuth, (req, res) => {
     Category.findAll().then(categories => {
         res.render("admin/categories/index", { categories: categories });
     });
@@ -37,7 +38,7 @@ router.get("/admin/categories", (req, res) => {
 });
 
 //criando a rota para exclusão
-router.post("/categories/delete", (req, res) => {
+router.post("/categories/delete", adminAuth, (req, res) => {
     var id = req.body.id;
     if (id != undefined) {   //se id != null
         if (!isNaN(id)) {       //se id não for número
@@ -78,7 +79,7 @@ router.get("/admin/categories/edit/:id", (req, res) => {
 });
 
 //criando a rota para update
-router.post("/categories/update", (req, res) => {
+router.post("/categories/update", adminAuth, (req, res) => {
     var id = req.body.id;
     var title = req.body.title;
     Category.update({ title: title, slug: slugify(title) }, {
